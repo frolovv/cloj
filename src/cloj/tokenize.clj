@@ -7,7 +7,7 @@
   [start end n]
     (and (>= n start) (<= n end)))
 
-(def valid-symbols (set (seq "!'*+-/<>=?")))
+(def valid-symbols (set (seq "!'*+-/<>=?^")))
 
 (defn between-ch
   [start-ch end-ch ch]
@@ -59,7 +59,7 @@
             (symbol? ch) (let [[rest' token] (get-symbol chars)]
                            (recur rest' (conj tokens token)))
             (= ch \") (let [[rest' token] (get-string rest)]
-                        (recur rest1' (conj tokens token)))
+                        (recur rest' (conj tokens token)))
             :else (throw (Exception. (format "unknown char [%s]" ch)))
             )
       )))
