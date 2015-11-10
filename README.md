@@ -1,36 +1,10 @@
-# cloj
+# Cloj [![Build Status](https://travis-ci.org/frolovv/cloj.svg?branch=master)](https://travis-ci.org/frolovv/cloj)
 
-FIXME: description
-
-## Installation
-
-Download from http://example.com/FIXME.
-
-## Usage
-
-FIXME: explanation
-
-    $ java -jar cloj-0.1.0-standalone.jar [args]
-
-## Options
-
-FIXME: listing of options this app accepts.
-
-## Examples
-
-...
-
-### Bugs
-
-...
-
-### Any Other Sections
-### That You Think
-### Might be Useful
+Evaluator for scheme/clojure like language written in clojure
 
 ## License
 
-Copyright © 2015 FIXME
+Copyright © 2015 Frolovv
 
 Distributed under the Eclipse Public License either version 1.0 or (at
 your option) any later version.
