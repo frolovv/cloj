@@ -13,7 +13,7 @@
     (succ (list) (list))
     (let [[token & rest] tokens
           [kind value] token]
-      (cond (kind (set [:number :plus :minus])) (succ [kind value] rest)
+      (cond (kind (set [:number :string :symbol])) (succ [kind value] rest)
             (= kind :lparen) (parse-many rest
                                          (fn [exprs even-more-tokens]
                                            (let [[[last-type _] & tail] even-more-tokens]
