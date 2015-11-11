@@ -82,5 +82,3 @@
     (is (= (tokenize " 123 ") (tokenize "123")))
     )
   )
-
-(run-tests)
