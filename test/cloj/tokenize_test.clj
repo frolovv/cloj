@@ -66,4 +66,21 @@
     (is (= (get-symbol (seq "abc 123")) ['(\space \1 \2 \3) '(:symbol "abc")]))
     ))
 
+(deftest get-string-test
+  (testing "sanity checks"
+    (is (= (get-string (seq "\"abc\"")) ['() '(:string "abc")]))
+    ))
+
+(deftest tokenize-test
+  (testing "sanity checks"
+    (is (= (tokenize "123") ['(:number 123)]))
+    (is (= (tokenize "lambda") ['(:symbol "lambda")]))
+    (is (= (tokenize "\"hello world\"") ['(:string "hello world")]))
+    (is (= (tokenize "(lambda)") ['(:lparen \() '(:symbol "lambda") '(:rparen \))]))
+    )
+  (testing "omitting whitespaces"
+    (is (= (tokenize " 123 ") (tokenize "123")))
+    )
+  )
+
 (run-tests)

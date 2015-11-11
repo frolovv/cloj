@@ -42,7 +42,7 @@
 
 (defn get-string
   [chars]
-  (let [[chars' more-chars] (split-with #(not (= %1 \")) chars)
+  (let [[chars' more-chars] (split-with #(not (= %1 \")) (rest chars))
         joined (clojure.string/join chars')]
     (list (rest more-chars) (list :string joined))))
 
@@ -58,7 +58,7 @@
                           (recur rest' (conj tokens token)))
             (symbol? ch) (let [[rest' token] (get-symbol chars)]
                            (recur rest' (conj tokens token)))
-            (= ch \") (let [[rest' token] (get-string rest)]
+            (= ch \") (let [[rest' token] (get-string chars)]
                         (recur rest' (conj tokens token)))
             :else (throw (Exception. (format "unknown char [%s]" ch)))
             )
