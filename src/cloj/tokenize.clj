@@ -19,7 +19,7 @@
   [ch]
     (between 0 32 (int ch)))
 
-(defn symbol?
+(defn my-symbol?
   [ch]
     (or (between-ch \a \z ch)
         (between-ch \A \Z ch)
@@ -35,7 +35,7 @@
 
 (defn get-symbol
   [chars]
-  (let [[symbols rest] (split-with symbol? chars)
+  (let [[symbols rest] (split-with my-symbol? chars)
         joined (clojure.string/join symbols)
         ]
     (list rest (list :symbol joined))))
@@ -56,7 +56,7 @@
             (= ch \)) (recur rest (conj tokens (list :rparen ch)))
             (digit? ch) (let [[rest' token] (get-digits chars)]
                           (recur rest' (conj tokens token)))
-            (symbol? ch) (let [[rest' token] (get-symbol chars)]
+            (my-symbol? ch) (let [[rest' token] (get-symbol chars)]
                            (recur rest' (conj tokens token)))
             (= ch \") (let [[rest' token] (get-string chars)]
                         (recur rest' (conj tokens token)))

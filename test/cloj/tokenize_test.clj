@@ -47,16 +47,16 @@
 
 (deftest symbol?-test
   (testing "true cases"
-    (is (symbol? \a))
-    (is (symbol? \A))
-    (is (symbol? \!))
-    (is (symbol? \^))
+    (is (my-symbol? \a))
+    (is (my-symbol? \A))
+    (is (my-symbol? \!))
+    (is (my-symbol? \^))
     )
   (testing "false cases"
-    (is (not (symbol? \1)))
-    (is (not (symbol? \tab)))
-    (is (not (symbol? \.)))
-    (is (not (symbol? \$)))
+    (is (not (my-symbol? \1)))
+    (is (not (my-symbol? \tab)))
+    (is (not (my-symbol? \.)))
+    (is (not (my-symbol? \$)))
     )
   )
 
