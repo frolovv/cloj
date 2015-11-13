@@ -13,7 +13,9 @@
     (succ (list) (list))
     (let [[token & rest] tokens
           [kind value] token]
-      (cond (kind (set [:number :string :symbol])) (succ [kind value] rest)
+      (cond (= kind :number) (succ value rest)
+            (= kind :string) (succ value rest)
+            (= kind :symbol) (succ (symbol value) rest)
             (= kind :lparen) (parse-many rest
                                          (fn [exprs even-more-tokens]
                                            (let [[[last-type _] & tail] even-more-tokens]
@@ -44,11 +46,6 @@
               (fn [exprs tokens] (if (empty? tokens) exprs (throw (Exception. (format "got extra tokens %s" tokens)))))
               (fn [] (throw (Exception. (format "failed to parse %s" str))))))
 
-(defn unparse1
-  [expr]
-  (cond (vector? expr) (let [[_ value] expr] (format "%s" value))
-        (list? expr) (format "(%s)" (unparse expr))))
-
 (defn unparse
   [exprs]
-  (join " " (map unparse1 exprs)))
+  (join " " (map str exprs)))
