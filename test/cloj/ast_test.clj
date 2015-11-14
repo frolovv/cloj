@@ -3,9 +3,34 @@
             [cloj.parse :refer :all]
             [cloj.ast :refer :all]))
 
-(deftest ast-test
-  (testing "parsing if-constants"
-    (is (= (ast "123") [:const 123]))
-    (is (= (ast "123 456") (list [:const 123] [:const 456])))
+(deftest ast-parsing-constants
+  (testing "parsing numbers"
+    (is (= (ast "123") [[:const 123]]))
+    (is (= (ast "123 456") [[:const 123] [:const 456]]))
+    )
+
+  (testing "parsing strings"
+    (is (= (ast "\"\"") [[:const ""]]))
+    (is (= (ast "\"123 456\"") [[:const "123 456"]]))
     )
   )
+
+(deftest ast-parsing-vars
+  (testing "parsing var"
+    (is (= (ast "abc") [[:var 'abc]]))
+    )
+  )
+
+(deftest ast-parsing-if-statments
+  (testing "parsing if"
+    (is (= (ast "(if 1 2 3)") [[:if [:const 1] [:const 2] [:const 3]]]))
+    )
+  )
+
+(deftest ast-parsing-applications
+  (testing "parsing applications"
+    (is (= (ast "(+ 1 2 3)") [[:application [:var '+] '([:const 1] [:const 2] [:const 3])]]))
+    )
+  )
+
+(run-tests)

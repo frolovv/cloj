@@ -19,15 +19,15 @@
   [expr]
   (cond (number? expr) [:const expr]
         (string? expr) [:const expr]
+        (symbol? expr) [:var expr]
         (if-expr? expr) (let [[_ if-test if-then if-else] expr]
                           [:if (ast1 if-test) (ast1 if-then) (ast1 if-else)])
-        (list? expr) (let [[[operator _] & args] expr
+        (list? expr) (let [[arg & args] expr
+                           operator (ast1 arg)
                            operands (map ast1 args)]
                        [:application operator operands])))
 (defn ast
   [str]
   (let [exprs (parse str)
         results (map ast1 exprs)]
-    (if (= (count results) 1)
-      (first results)
-      results)))
+    results))
