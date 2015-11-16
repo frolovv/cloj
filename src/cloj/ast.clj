@@ -15,6 +15,15 @@
        (= (count expr) 4)
        (= (first expr) 'if)))
 
+;; (lambda (a b c) body)
+(defn lambda-expr?
+  [expr]
+  (and (list? expr)
+       (= (first expr) 'lambda)
+       (list? (second expr))
+       (= (count expr) 3)
+  ))
+
 (defn ast1
   [expr]
   (cond (number? expr) [:const expr]
@@ -22,6 +31,8 @@
         (symbol? expr) [:var expr]
         (if-expr? expr) (let [[_ if-test if-then if-else] expr]
                           [:if (ast1 if-test) (ast1 if-then) (ast1 if-else)])
+        (lambda-expr? expr) (let [[_ params body] expr]
+                              [:lambda params (ast1 body)])
         (list? expr) (let [[arg & args] expr
                            operator (ast1 arg)
                            operands (map ast1 args)]

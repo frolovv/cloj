@@ -32,3 +32,8 @@
     (is (= (ast "(+ 1 2 3)") [[:application [:var '+] '([:const 1] [:const 2] [:const 3])]]))
     )
   )
+
+(deftest ast-parsing-applications
+  (testing "parsing lambda expressions"
+    (is (= (ast "(lambda (x) x)") [[:lambda '(x) [:var 'x]]]))
+  ))
