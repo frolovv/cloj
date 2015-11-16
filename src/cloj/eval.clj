@@ -23,10 +23,7 @@
 
 (defn var-name [ast] (second ast))
 
-(defn GLOBAL-ENV
-  [sym]
-  (let [GLOBAL (hash-map '+ +, '- -)]
-    (GLOBAL sym)))
+(def GLOBAL-ENV (hash-map '+ +, '- -))
 
 (defn eval1
   [ast env]
