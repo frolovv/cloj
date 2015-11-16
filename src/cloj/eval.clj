@@ -12,16 +12,13 @@
 (defn if-then [ast] (nth ast 2))
 (defn if-else [ast] (nth ast 3))
 
-(defn applic-ast?
-  [ast]
-  (= (first ast) :application))
+(defn applic-ast? [ast] (= (first ast) :application))
 
 (defn applic-operator [ast] (nth ast 1))
 (defn applic-operands [ast] (nth ast 2))
 
 (defn var-ast? [ast] (= (first ast) :var))
-
-(defn var-name [ast] (second ast))
+(def var-name second)
 
 (def GLOBAL-ENV (hash-map '+ +, '- -))
 
