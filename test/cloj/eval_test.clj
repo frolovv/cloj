@@ -12,4 +12,11 @@
 (deftest testing-ifs
   (testing "if expressions"
     (is (= (my-eval "(if 1 2 3)") '(2)))
+    (is (= (my-eval "(if (if 1 2 3) (if 4 5 6) (if 7 8 9))") '(5)))
+    ))
+
+(deftest testing-applications
+  (testing "+ tests"
+    (is (= (my-eval "(+ 1 2 3)") '(6)))
+    (is (= (my-eval "(+ 0)") '(0)))
     ))
