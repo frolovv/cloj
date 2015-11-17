@@ -20,3 +20,19 @@
     (is (= (my-eval "(+ 1 2 3)") '(6)))
     (is (= (my-eval "(+ 0)") '(0)))
     ))
+
+(deftest testing-make-env
+  (testing "make-env sanity"
+    (let [env (make-env GLOBAL-ENV ['a 'b] [123 "abc"])]
+      (is (= (env 'a) 123))
+      (is (= (env 'b) "abc"))
+      (is (= (env 'i-dont-exist) nil))
+      )))
+
+(deftest testing-lambdas
+  (testing "+ tests"
+    (is (= (my-eval "((lambda (x) x) 123)") [123]))
+    (is (= (my-eval "((lambda (x y z) x) 1 2 3)") [1]))
+    (is (= (my-eval "((lambda (x y z) y) 1 2 3)") [2]))
+    (is (= (my-eval "((lambda (x y z) (+ x y z)) 1 2 3)") [6]))
+    ))

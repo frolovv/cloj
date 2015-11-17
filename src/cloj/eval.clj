@@ -8,26 +8,30 @@
 (def const-value second)
 
 (defn if-ast? [ast] (= (first ast) :if))
-(defn if-test [ast] (nth ast 1))
-(defn if-then [ast] (nth ast 2))
-(defn if-else [ast] (nth ast 3))
-
 (defn applic-ast? [ast] (= (first ast) :application))
-
-(defn applic-operator [ast] (nth ast 1))
-(defn applic-operands [ast] (nth ast 2))
-
 (defn var-ast? [ast] (= (first ast) :var))
 (def var-name second)
 
+(defn lambda-ast? [ast] (= (first ast) :lambda))
+
 (def GLOBAL-ENV (hash-map '+ +, '- -))
+
+(defn make-env
+  [old-env names values]
+  (let [new-env (zipmap names values)]
+    (fn [sym] (or (new-env sym) (old-env sym)))))
+
 
 (defn eval1
   [ast env]
   (cond (const-ast? ast) (const-value ast)
-        (if-ast? ast) (if (eval1 (if-test ast) env) (eval1 (if-then ast) env) (eval1 (if-else ast) env))
         (var-ast? ast) (env (var-name ast))
-        (applic-ast? ast) (apply (eval1 (applic-operator ast) env) (map #(eval1 %1 env) (applic-operands ast)))
+        (if-ast? ast) (let [[_ if-test if-then if-else] ast]
+                        (if (eval1 if-test env) (eval1 if-then env) (eval1 if-else env)))
+        (lambda-ast? ast) (let [[_ params body] ast]
+                            (fn [& values] (eval1 body (make-env env params values))))
+        (applic-ast? ast) (let [[_ operator operands] ast]
+                            (apply (eval1 operator env) (map #(eval1 %1 env) operands)))
         ))
 
 (defn my-eval
