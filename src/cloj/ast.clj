@@ -24,6 +24,14 @@
        (= (count expr) 3)
   ))
 
+;; (let ((n1 e1) ... (nN eN)) body)
+(defn let-expr? [expr]
+  (and (list? expr)
+       (= (first expr) 'let)
+       (list? (second expr))
+       (= (count expr) 3)
+       ))
+
 (defn ast1
   [expr]
   (cond (number? expr) [:const expr]
@@ -33,6 +41,10 @@
                           [:if (ast1 if-test) (ast1 if-then) (ast1 if-else)])
         (lambda-expr? expr) (let [[_ params body] expr]
                               [:lambda params (ast1 body)])
+        (let-expr? expr) (let [[_ bindings body] expr
+                               names (map first bindings)
+                               exprs (map second bindings)]
+                           [:let names (map ast1 exprs) (ast1 body)])
         (list? expr) (let [[arg & args] expr
                            operator (ast1 arg)
                            operands (map ast1 args)]

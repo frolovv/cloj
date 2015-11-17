@@ -37,3 +37,8 @@
   (testing "parsing lambda expressions"
     (is (= (ast "(lambda (x) x)") [[:lambda '(x) [:var 'x]]]))
   ))
+
+(deftest ast-parsing-let-expressions
+  (testing "parsing let expressions"
+    (is (= (ast "(let ((x 1)) x)") [[:let ['x] [[:const 1]] [:var 'x]]]))
+  ))
