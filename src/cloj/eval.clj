@@ -1,18 +1,11 @@
 (ns cloj.eval
-   (:require [cloj.ast :refer :all]))
+  (:require [cloj.ast :refer :all]
+            [cloj.expand :refer :all]))
 
 (declare my-eval)
 (declare eval1)
-
-(defn const-ast? [ast] (= (first ast) :const))
 (def const-value second)
-
-(defn if-ast? [ast] (= (first ast) :if))
-(defn applic-ast? [ast] (= (first ast) :application))
-(defn var-ast? [ast] (= (first ast) :var))
 (def var-name second)
-
-(defn lambda-ast? [ast] (= (first ast) :lambda))
 
 (def GLOBAL-ENV (hash-map '+ +, '- -))
 
@@ -36,5 +29,6 @@
 
 (defn my-eval
   [str]
-  (let [asts (ast str)]
-    (map #(eval1 %1 GLOBAL-ENV) asts)))
+  (let [asts (ast str)
+        expanded (expand asts)]
+    (map #(eval1 %1 GLOBAL-ENV) expanded)))

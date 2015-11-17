@@ -36,3 +36,8 @@
     (is (= (my-eval "((lambda (x y z) y) 1 2 3)") [2]))
     (is (= (my-eval "((lambda (x y z) (+ x y z)) 1 2 3)") [6]))
     ))
+
+(deftest testing-let-expressions
+  (testing "testing expansion and evaluation of lets"
+    (is (= (my-eval "(let ((x 123)) x)") [123]))
+    ))
