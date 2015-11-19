@@ -16,6 +16,11 @@
 
 
 (deftest test-expandable
-  (testing "forms that should be expanded"
+  (testing "let expressions"
     (is (= (expand (ast "(let ((x 1)) x)")) (ast "((lambda (x) x) 1)")))
-    ))
+    )
+  (testing "let* expressions"
+    (is (= (expand (ast "(let* ((x 1)) x)")) (ast "((lambda (x) x) 1)")))
+    (is (= (expand (ast "(let* ((x 1) (y x)) y)")) (ast "((lambda (x) ((lambda (y) y) x)) 1)")))
+    )
+  )
