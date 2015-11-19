@@ -42,3 +42,8 @@
   (testing "parsing let expressions"
     (is (= (ast "(let ((x 1)) x)") [[:let ['x] [[:const 1]] [:var 'x]]]))
   ))
+
+(deftest ast-parsing-let*-expressions
+  (testing "parsing let expressions"
+    (is (= (ast "(let* ((x 1)) x)") [[:let* ['x] [[:const 1]] [:var 'x]]]))
+  ))
