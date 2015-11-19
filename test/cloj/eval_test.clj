@@ -41,3 +41,8 @@
   (testing "testing expansion and evaluation of lets"
     (is (= (my-eval "(let ((x 123)) x)") [123]))
     ))
+
+(deftest testing-let*-expressions
+  (testing "testing expansion and evaluation of let* special form"
+    (is (= (my-eval "(let* ((x 123) (y x)) y)") [123]))
+    ))
