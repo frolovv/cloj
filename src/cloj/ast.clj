@@ -15,6 +15,18 @@
        (= (count expr) 4)
        (= (first expr) 'if)))
 
+;; (and e1 e2 .. eN)
+(defn and-expr?
+  [expr]
+  (and (list? expr)
+       (= (first expr) 'and)))
+
+;; (or e1 e2 .. eN)
+(defn or-expr?
+  [expr]
+  (and (list? expr)
+       (= (first expr) 'or)))
+
 ;; (lambda (a b c) body)
 (defn lambda-expr?
   [expr]
@@ -47,6 +59,8 @@
         (symbol? expr) [:var expr]
         (if-expr? expr) (let [[_ if-test if-then if-else] expr]
                           [:if (ast1 if-test) (ast1 if-then) (ast1 if-else)])
+        (and-expr? expr) [:and (map ast1 (rest expr))]
+        (or-expr? expr) [:or (map ast1 (rest expr))]
         (lambda-expr? expr) (let [[_ params body] expr]
                               [:lambda params (ast1 body)])
         (let-expr? expr) (let [[_ bindings body] expr

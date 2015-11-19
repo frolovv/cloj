@@ -12,6 +12,9 @@
     (is (= (ast "(if 1 2 3)") (expand (ast "(if 1 2 3)"))))
     (is (= (ast "(+ 1 2 3)") (expand (ast "(+ 1 2 3)"))))
     (is (= (ast "(lambda (x) x)") (expand (ast "(lambda (x) x)"))))
+
+    (is (= (ast "(and 1 2 3)") (expand (ast "(and 1 2 3)"))))
+    (is (= (ast "(or 1 2 3)") (expand (ast "(or 1 2 3)"))))
     ))
 
 

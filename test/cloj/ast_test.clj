@@ -47,3 +47,13 @@
   (testing "parsing let expressions"
     (is (= (ast "(let* ((x 1)) x)") [[:let* ['x] [[:const 1]] [:var 'x]]]))
   ))
+
+(deftest ast-parsing-and-expressions
+  (testing "parsing and expressions"
+    (is (= (ast "(and 1 2 3)") [[:and [[:const 1] [:const 2] [:const 3]]]]))
+  ))
+
+(deftest ast-parsing-or-expressions
+  (testing "parsing and expressions"
+    (is (= (ast "(or 1 2 3)") [[:or [[:const 1] [:const 2] [:const 3]]]]))
+  ))
