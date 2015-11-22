@@ -71,6 +71,12 @@
     (is (= (get-string (seq "\"abc\"")) ['() '(:string "abc")]))
     ))
 
+(deftest get-boolean-test
+  (testing "sanity checks"
+    (is (= (get-boolean (seq "#t")) [nil '(:boolean \t)]))
+    (is (= (get-boolean (seq "#f")) [nil '(:boolean \f)]))
+    ))
+
 (deftest tokenize-test
   (testing "sanity checks"
     (is (= (tokenize "123") ['(:number 123)]))

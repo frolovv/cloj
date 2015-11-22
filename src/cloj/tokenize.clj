@@ -46,6 +46,15 @@
         joined (clojure.string/join chars')]
     (list (rest more-chars) (list :string joined))))
 
+(defn fail-fast [ch] (throw (Exception. (format "unknown char [%s]" ch))))
+
+(defn get-boolean
+  [chars]
+    (let [[_ value & rest] chars]
+      (cond (= value \t) (list rest '(:boolean \t))
+            (= value \f) (list rest '(:boolean \f))
+            :else (fail-fast value))))
+
 (defn tokenize1
   [chars tokens]
   (if (empty? chars)
@@ -54,6 +63,8 @@
       (cond (whitespace? ch) (recur rest tokens)
             (= ch \() (recur rest (conj tokens (list :lparen ch)))
             (= ch \)) (recur rest (conj tokens (list :rparen ch)))
+            (= ch \#) (let [[rest' token] (get-boolean chars)]
+                        (recur rest' (conj tokens token)))
             (digit? ch) (let [[rest' token] (get-digits chars)]
                           (recur rest' (conj tokens token)))
             (my-symbol? ch) (let [[rest' token] (get-symbol chars)]
