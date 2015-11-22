@@ -23,6 +23,8 @@
                         (if (eval1 if-test env) (eval1 if-then env) (eval1 if-else env)))
         (and-ast? ast) (let [[_ expressions] ast]
                          (reduce (fn [result expr] (and result (eval1 expr env))) true expressions))
+        (or-ast? ast) (let [[_ expressions] ast]
+                        (reduce (fn [result expr] (or result (eval1 expr env))) false expressions))
         (lambda-ast? ast) (let [[_ params body] ast]
                             (fn [& values] (eval1 body (make-env env params values))))
         (applic-ast? ast) (let [[_ operator operands] ast]

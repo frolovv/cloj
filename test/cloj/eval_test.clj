@@ -52,3 +52,9 @@
     (is (= (my-eval "(and 1 2 3)") [3]))
     (is (= (my-eval "(and)") [true]))
     ))
+
+(deftest testing-or-expressions
+  (testing "testing evaluation of or expression"
+    (is (= (my-eval "(or 1 2 3)") [1]))
+    (is (= (my-eval "(or)") [false]))
+    ))
