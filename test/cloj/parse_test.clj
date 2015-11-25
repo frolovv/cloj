@@ -16,6 +16,11 @@
     (is (= (parse "\"abc\"") ["abc"]))
     )
 
+  (testing "parsing booleans"
+    (is (= (parse "#t") [true]))
+    (is (= (parse "#f") [false]))
+    )
+
   (testing "parsing expressions"
     (is (= (parse "(123 4 5 6)") [(list 123 4 5 6)]))
     (is (= (parse "(1 (2 (3)))") ['(1 (2 (3)))]))

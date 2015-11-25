@@ -73,8 +73,8 @@
 
 (deftest get-boolean-test
   (testing "sanity checks"
-    (is (= (get-boolean (seq "#t")) [nil '(:boolean \t)]))
-    (is (= (get-boolean (seq "#f")) [nil '(:boolean \f)]))
+    (is (= (get-boolean (seq "#t")) [nil '(:boolean true)]))
+    (is (= (get-boolean (seq "#f")) [nil '(:boolean false)]))
     ))
 
 (deftest tokenize-test

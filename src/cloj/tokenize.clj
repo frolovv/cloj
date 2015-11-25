@@ -51,8 +51,8 @@
 (defn get-boolean
   [chars]
     (let [[_ value & rest] chars]
-      (cond (= value \t) (list rest '(:boolean \t))
-            (= value \f) (list rest '(:boolean \f))
+      (cond (= value \t) (list rest '(:boolean true))
+            (= value \f) (list rest '(:boolean false))
             :else (fail-fast value))))
 
 (defn tokenize1

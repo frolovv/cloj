@@ -15,6 +15,7 @@
           [kind value] token]
       (cond (= kind :number) (succ value rest)
             (= kind :string) (succ value rest)
+            (= kind :boolean) (succ value rest)
             (= kind :symbol) (succ (symbol value) rest)
             (= kind :lparen) (parse-many rest
                                          (fn [exprs even-more-tokens]
