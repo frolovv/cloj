@@ -7,7 +7,15 @@
 (def const-value second)
 (def var-name second)
 
-(def GLOBAL-ENV-ATOM (atom (hash-map '+ +, '- -)))
+(def GLOBAL-ENV-ATOM (atom (hash-map
+                            '+ +
+                            '- -
+                            'zero? zero?
+                            '* *
+
+
+                            )))
+
 (defn GLOBAL-ENV [sym] (@GLOBAL-ENV-ATOM sym))
 
 (defn UPDATE-GLOBAL-ENV!
@@ -35,8 +43,11 @@
                         (reduce (fn [result expr] (or result (eval1 expr env))) false expressions))
         (lambda-ast? ast) (let [[_ params body] ast]
                             (fn [& values] (eval1 body (make-env env params values))))
-        (applic-ast? ast) (let [[_ operator operands] ast]
-                            (apply (eval1 operator env) (map #(eval1 %1 env) operands)))
+        (applic-ast? ast) (let [[_ operator-ast operands-ast] ast
+                                operator (eval1 operator-ast env)
+                                operands (map #(eval1 %1 env) operands-ast)]
+                            (assert (not (nil? operator)) (format "variable %s is unbound" (var-name operator-ast)))
+                            (apply operator operands))
         ))
 
 (defn my-eval

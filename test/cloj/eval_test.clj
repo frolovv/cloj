@@ -66,4 +66,18 @@
   (testing "testing evaluation of define expression"
     (is (= (my-eval "(define x 10) x") [10]))
     (is (= (my-eval "(define x (lambda (x) (+ x 100))) (x 100)") [200]))
-    ))
+    )
+
+  (testing "testing evaluation of complex define expressions"
+    (is (=
+         (my-eval "(define fact
+                    (lambda (n)
+                      (if (zero? n)
+                          1
+                          (* n (fact (- n 1))))))
+
+                    (fact 5)")
+         [120]))
+    )
+
+  )
