@@ -62,3 +62,8 @@
   (testing "parsing and expressions"
     (is (= (ast "(or 1 2 3)") [[:or [[:const 1] [:const 2] [:const 3]]]]))
   ))
+
+(deftest ast-parsing-define-expressions
+  (testing "parsing define expressions"
+    (is (= (ast "(define x 10)") [[:define 'x [:const 10] ]]))
+  ))

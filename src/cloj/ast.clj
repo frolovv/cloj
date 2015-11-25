@@ -52,6 +52,13 @@
        (= (count expr) 3)
        ))
 
+;; (define name value)
+(defn define-expr? [expr]
+  (and (list? expr)
+       (= (first expr) 'define)
+       (= (count expr) 3)
+       (symbol? (second expr))))
+
 (defn boolean?
   [expr] (or (= expr true) (= expr false)))
 
@@ -63,6 +70,8 @@
         (boolean? expr) [:const expr]
         (if-expr? expr) (let [[_ if-test if-then if-else] expr]
                           [:if (ast1 if-test) (ast1 if-then) (ast1 if-else)])
+        (define-expr? expr) (let [[_ name value] expr]
+                              [:define name (ast1 value)])
         (and-expr? expr) [:and (map ast1 (rest expr))]
         (or-expr? expr) [:or (map ast1 (rest expr))]
         (lambda-expr? expr) (let [[_ params body] expr]

@@ -15,6 +15,7 @@
 
     (is (= (ast "(and 1 2 3)") (expand (ast "(and 1 2 3)"))))
     (is (= (ast "(or 1 2 3)") (expand (ast "(or 1 2 3)"))))
+    (is (= (ast "(define x 10)") (expand (ast "(define x 10)"))))
     ))
 
 

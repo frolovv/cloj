@@ -61,3 +61,9 @@
     (is (= (my-eval "(or)") [false]))
     (is (= (my-eval "(or #t #f)") [true]))
     ))
+
+(deftest testing-define-expressions
+  (testing "testing evaluation of define expression"
+    (is (= (my-eval "(define x 10) x") [10]))
+    (is (= (my-eval "(define x (lambda (x) (+ x 100))) (x 100)") [200]))
+    ))

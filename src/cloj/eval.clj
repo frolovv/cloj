@@ -7,7 +7,12 @@
 (def const-value second)
 (def var-name second)
 
-(def GLOBAL-ENV (hash-map '+ +, '- -))
+(def GLOBAL-ENV-ATOM (atom (hash-map '+ +, '- -)))
+(defn GLOBAL-ENV [sym] (@GLOBAL-ENV-ATOM sym))
+
+(defn UPDATE-GLOBAL-ENV!
+  [sym value]
+  (swap! GLOBAL-ENV-ATOM assoc sym value))
 
 (defn make-env
   [old-env names values]
@@ -21,6 +26,9 @@
         (var-ast? ast) (env (var-name ast))
         (if-ast? ast) (let [[_ if-test if-then if-else] ast]
                         (if (eval1 if-test env) (eval1 if-then env) (eval1 if-else env)))
+        (define-ast? ast) (let [[_ name value] ast]
+                            (UPDATE-GLOBAL-ENV! name (eval1 value env))
+                            nil)
         (and-ast? ast) (let [[_ expressions] ast]
                          (reduce (fn [result expr] (and result (eval1 expr env))) true expressions))
         (or-ast? ast) (let [[_ expressions] ast]
@@ -34,5 +42,6 @@
 (defn my-eval
   [str]
   (let [asts (ast str)
-        expanded (expand asts)]
-    (map #(eval1 %1 GLOBAL-ENV) expanded)))
+        expanded (expand asts)
+        results (map #(eval1 %1 GLOBAL-ENV) expanded)]
+        results))
