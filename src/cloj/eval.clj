@@ -44,4 +44,4 @@
   (let [asts (ast str)
         expanded (expand asts)
         results (map #(eval1 %1 GLOBAL-ENV) expanded)]
-        results))
+        (filter #(not (nil? %1)) results)))
