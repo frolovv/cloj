@@ -13,6 +13,11 @@
     (is (= (ast "\"\"") [[:const ""]]))
     (is (= (ast "\"123 456\"") [[:const "123 456"]]))
     )
+
+  (testing "parsing booleans"
+    (is (= (ast "#t") [[:const true]]))
+    (is (= (ast "#f") [[:const false]]))
+    )
   )
 
 (deftest ast-parsing-vars

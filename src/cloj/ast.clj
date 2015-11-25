@@ -52,11 +52,15 @@
        (= (count expr) 3)
        ))
 
+(defn boolean?
+  [expr] (or (= expr true) (= expr false)))
+
 (defn ast1
   [expr]
   (cond (number? expr) [:const expr]
         (string? expr) [:const expr]
         (symbol? expr) [:var expr]
+        (boolean? expr) [:const expr]
         (if-expr? expr) (let [[_ if-test if-then if-else] expr]
                           [:if (ast1 if-test) (ast1 if-then) (ast1 if-else)])
         (and-expr? expr) [:and (map ast1 (rest expr))]
