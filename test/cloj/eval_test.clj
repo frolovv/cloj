@@ -70,14 +70,34 @@
 
   (testing "testing evaluation of complex define expressions"
     (is (=
-         (my-eval "(define fact
-                    (lambda (n)
-                      (if (zero? n)
-                          1
-                          (* n (fact (- n 1))))))
+          (my-eval "(define fact
+                   (lambda (n)
+                   (if (zero? n)
+                   1
+                   (* n (fact (- n 1))))))
 
-                    (fact 5)")
-         [120]))
+                   (fact 5)")
+          [120]))
+    )
+
+  (testing "testing evaluation of mutually recursive functions"
+    (is (=
+          (my-eval "(define odd?
+                   (lambda (n)
+                   (if (zero? n) #f
+                   (even? (- n 1)))))
+
+                   (define even?
+                   (lambda (n)
+                   (if (zero? n) #t
+                   (odd? (- n 1)))))
+
+                   (odd? 0)
+                   (odd? 1)
+                   (even? 0)
+                   (even? 1)
+                   ")
+          [false true true false]))
     )
 
   )
