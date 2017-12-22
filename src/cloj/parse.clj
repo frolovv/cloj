@@ -8,38 +8,38 @@
 (declare unparse)
 
 (defn parse1
-  [tokens succ fail]
+  [tokens fn-success fn-failure]
   (if (empty? tokens)
-    (succ (list) (list))
+    (fn-success (list) (list))
     (let [[token & rest] tokens
           [kind value] token]
-      (cond (= kind :number) (succ value rest)
-            (= kind :string) (succ value rest)
-            (= kind :boolean) (succ value rest)
-            (= kind :symbol) (succ (symbol value) rest)
+      (cond (= kind :number) (fn-success value rest)
+            (= kind :string) (fn-success value rest)
+            (= kind :boolean) (fn-success value rest)
+            (= kind :symbol) (fn-success (symbol value) rest)
             (= kind :lparen) (parse-many rest
                                          (fn [exprs even-more-tokens]
                                            (let [[[last-type _] & tail] even-more-tokens]
                                              (if (= last-type :rparen)
-                                               (succ exprs tail)
-                                               (fail))))
-                                         fail)
-            :else (fail))
+                                               (fn-success exprs tail)
+                                               (fn-failure))))
+                                         fn-failure)
+            :else (fn-failure))
 
       )
     ))
 
 
 (defn parse-many
-  [tokens succ fail]
+  [tokens fn-success fn-failure]
   (if (empty? tokens)
-    (succ (list) (list))
+    (fn-success (list) (list))
     (parse1 tokens
             (fn [expr more-tokens]
               (parse-many more-tokens
-                          (fn [exprs even-more-tokens] (succ (conj exprs expr) even-more-tokens))
-                          (fn [] (succ (list expr) more-tokens))))
-            fail)))
+                          (fn [exprs even-more-tokens] (fn-success (conj exprs expr) even-more-tokens))
+                          (fn [] (fn-success (list expr) more-tokens))))
+            fn-failure)))
 
 (defn parse
   [str]
