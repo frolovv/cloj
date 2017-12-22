@@ -100,4 +100,18 @@
           [false true true false]))
     )
 
+  (testing "testing evaluation of higher order functions"
+    (is (=
+          (my-eval "(define make-add-n
+                   (lambda (n)
+                   (lambda(x) (+ n x))
+                   ))
+
+                   (define add-one (make-add-n 1))
+                   (add-one 0)
+                   (add-one 1)
+                   (add-one 99)
+                   ")
+          [1 2 100]))
+    )
   )
