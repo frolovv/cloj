@@ -12,9 +12,15 @@
                             '- -
                             'zero? zero?
                             '* *
-
-
-                            )))
+                            '= =
+                            '> >
+                            '< <
+                            'list list
+                            'list? list?
+                            'length count
+                            'car first
+                            'cdr rest
+                            'cons cons)))
 
 (defn GLOBAL-ENV [sym] (@GLOBAL-ENV-ATOM sym))
 
@@ -26,7 +32,6 @@
   [old-env names values]
   (let [new-env (zipmap names values)]
     (fn [sym] (or (new-env sym) (old-env sym)))))
-
 
 (defn eval1
   [ast env]
@@ -47,12 +52,25 @@
                                 operator (eval1 operator-ast env)
                                 operands (map #(eval1 %1 env) operands-ast)]
                             (assert (not (nil? operator)) (format "variable %s is unbound" (var-name operator-ast)))
-                            (apply operator operands))
-        ))
+                            (apply operator operands))))
 
 (defn my-eval
   [str]
   (let [asts (ast str)
         expanded (expand asts)
         results (map #(eval1 %1 GLOBAL-ENV) expanded)]
-        (filter #(not (nil? %1)) results)))
+    (doall (filter #(not (nil? %1)) results))))
+
+(defn SETUP-GLOBAL-ENV
+  []
+  (do
+    (my-eval "(define positive? (lambda (n) (if (> n 0) #t #f)))")
+    (my-eval "(define negative? (lambda (n) (if (< n 0) #t #f)))")
+    (my-eval "(define odd? (lambda (n) (if (zero? n) #f (even? (- n 1)))))")
+    (my-eval "(define even? (lambda (n) (if (zero? n) #t (odd? (- n 1)))))")
+    (my-eval "(define null? (lambda (xs) (and (list? xs) (zero? (length xs)))))")
+    (my-eval "(define map (lambda (xs f)
+          (if (null? xs) (list)
+          (cons (f (car x)) (map (cdr x) f)))))")))
+  
+(SETUP-GLOBAL-ENV)
