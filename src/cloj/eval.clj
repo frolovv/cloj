@@ -36,7 +36,10 @@
 (defn eval1
   [ast env]
   (cond (const-ast? ast) (const-value ast)
-        (var-ast? ast) (env (var-name ast))
+        (var-ast? ast) (let [var-value (env (var-name ast))]
+                         (if (nil? var-value)
+                           (throw (Exception. "unbounded variable"))
+                           var-value))
         (if-ast? ast) (let [[_ if-test if-then if-else] ast]
                         (if (eval1 if-test env) (eval1 if-then env) (eval1 if-else env)))
         (define-ast? ast) (let [[_ name value] ast]
@@ -72,5 +75,5 @@
     (my-eval "(define map (lambda (xs f)
           (if (null? xs) (list)
           (cons (f (car xs)) (map (cdr xs) f)))))")))
-  
+
 (SETUP-GLOBAL-ENV)

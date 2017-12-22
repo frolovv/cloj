@@ -9,6 +9,13 @@
     (is (= (my-eval "\"abc\"") '("abc")))
     ))
 
+(deftest testing-vars
+  (testing "vars"
+    (is (= (my-eval "zero?") (list zero?)))
+    (is (= (my-eval "+") (list +)))
+    (is (thrown? Exception (my-eval "xyz")))
+    ))
+
 (deftest testing-ifs
   (testing "if expressions"
     (is (= (my-eval "(if 1 2 3)") '(2)))
@@ -115,3 +122,5 @@
           [1 2 100]))
     )
   )
+
+  (run-tests)
