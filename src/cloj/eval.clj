@@ -67,13 +67,21 @@
 (defn SETUP-GLOBAL-ENV
   []
   (do
+    ;; numeric
     (my-eval "(define positive? (lambda (n) (if (> n 0) #t #f)))")
     (my-eval "(define negative? (lambda (n) (if (< n 0) #t #f)))")
     (my-eval "(define odd? (lambda (n) (if (zero? n) #f (even? (- n 1)))))")
     (my-eval "(define even? (lambda (n) (if (zero? n) #t (odd? (- n 1)))))")
+
+    ;; boolean 
+    (my-eval "(define not (lambda (x) (if x #f #t)))")
+
+    ;; predicates
     (my-eval "(define null? (lambda (xs) (and (list? xs) (zero? (length xs)))))")
-    (my-eval "(define map (lambda (xs f)
+
+    ;; collection
+    (my-eval "(define map (lambda (f xs)
           (if (null? xs) (list)
-          (cons (f (car xs)) (map (cdr xs) f)))))")))
+          (cons (f (car xs)) (map f (cdr xs))))))")))
 
 (SETUP-GLOBAL-ENV)
