@@ -71,6 +71,6 @@
     (my-eval "(define null? (lambda (xs) (and (list? xs) (zero? (length xs)))))")
     (my-eval "(define map (lambda (xs f)
           (if (null? xs) (list)
-          (cons (f (car x)) (map (cdr x) f)))))")))
+          (cons (f (car xs)) (map (cdr xs) f)))))")))
   
 (SETUP-GLOBAL-ENV)
