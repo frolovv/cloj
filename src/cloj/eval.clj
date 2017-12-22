@@ -81,7 +81,13 @@
 
     ;; collection
     (my-eval "(define map (lambda (f xs)
-          (if (null? xs) (list)
-          (cons (f (car xs)) (map f (cdr xs))))))")))
+                (if (null? xs) (list)
+                    (cons (f (car xs)) (map f (cdr xs))))))")
+    (my-eval "(define (foldl f acc xs)
+                (if (null? xs) acc
+                    (foldl f (f acc (car xs)) (cdr xs))))")
+    (my-eval "(define (foldr f end xs)
+                (if (null? xs) end
+                    (f (car xs) (foldr f end (cdr xs)))))"))))
 
 (SETUP-GLOBAL-ENV)
