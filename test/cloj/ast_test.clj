@@ -66,4 +66,6 @@
 (deftest ast-parsing-define-expressions
   (testing "parsing define expressions"
     (is (= (ast "(define x 10)") [[:define 'x [:const 10] ]]))
+    (is (= (ast "(define (foo x) x)") [[:define '(foo x) [:var 'x] ]]))
+    (is (= (ast "(define (foo) 10)") [[:define '(foo) [:const 10] ]]))
   ))

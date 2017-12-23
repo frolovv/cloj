@@ -57,7 +57,7 @@
   (and (list? expr)
        (= (first expr) 'define)
        (= (count expr) 3)
-       (symbol? (second expr))))
+       (or (symbol? (second expr)) (list? (second expr)))))
 
 (defn boolean?
   [expr] (or (= expr true) (= expr false)))
