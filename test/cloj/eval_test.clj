@@ -73,6 +73,7 @@
   (testing "testing evaluation of define expression"
     (is (= (my-eval "(define x 10) x") [10]))
     (is (= (my-eval "(define x (lambda (x) (+ x 100))) (x 100)") [200]))
+    (is (= (my-eval "(define (foo x) (+ x 100)) (x 100)") [200]))
     )
 
   (testing "testing evaluation of complex define expressions"
