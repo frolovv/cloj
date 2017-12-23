@@ -15,19 +15,13 @@
 
     (is (= (ast "(and 1 2 3)") (expand (ast "(and 1 2 3)"))))
     (is (= (ast "(or 1 2 3)") (expand (ast "(or 1 2 3)"))))
-    (is (= (ast "(define x 10)") (expand (ast "(define x 10)"))))
-    ))
-
+    (is (= (ast "(define x 10)") (expand (ast "(define x 10)"))))))
 
 (deftest test-expandable
   (testing "let expressions"
-    (is (= (expand (ast "(let ((x 1)) x)")) (ast "((lambda (x) x) 1)")))
-    )
+    (is (= (expand (ast "(let ((x 1)) x)")) (ast "((lambda (x) x) 1)"))))
   (testing "let* expressions"
     (is (= (expand (ast "(let* ((x 1)) x)")) (ast "((lambda (x) x) 1)")))
-    (is (= (expand (ast "(let* ((x 1) (y x)) y)")) (ast "((lambda (x) ((lambda (y) y) x)) 1)")))
-    )
+    (is (= (expand (ast "(let* ((x 1) (y x)) y)")) (ast "((lambda (x) ((lambda (y) y) x)) 1)"))))
   (testing "define expressions"
-    (is (= (expand (ast "(define (foo x) x)")) (ast "(define foo (lambda (x) x))")))
-    )
-  )
+    (is (= (expand (ast "(define (foo x) x)")) (ast "(define foo (lambda (x) x))")))))
