@@ -66,11 +66,21 @@
     (is (= (tokenize "lambda") ['(:symbol "lambda")]))
     (is (= (tokenize "\"hello world\"") ['(:string "hello world")]))
     (is (= (tokenize "(lambda)") ['(:lparen \() '(:symbol "lambda") '(:rparen \))])))
+
   (testing "numbers sanity"
     (is (= (tokenize "123") ['(:number 123)]))
     (is (= (tokenize "1.23") ['(:number 1.23)]))
     (is (= (tokenize "-1.23") ['(:number -1.23)]))
     (is (= (tokenize "-123") ['(:number -123)])))
+
+  (testing "booleans sanity"
+    (is (= (tokenize "#t") ['(:boolean true)]))
+    (is (= (tokenize "#f") ['(:boolean false)])))
+
+  (testing "strings sanity"
+    (is (= (tokenize "\"\"") ['(:string "")]))
+    (is (= (tokenize "\"abc\"") ['(:string "abc")])))
+    
   (testing "omitting whitespaces"
     (is (= (tokenize " 123 ") (tokenize "123")))))
 
