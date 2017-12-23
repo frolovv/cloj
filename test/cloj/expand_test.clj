@@ -27,4 +27,7 @@
     (is (= (expand (ast "(let* ((x 1)) x)")) (ast "((lambda (x) x) 1)")))
     (is (= (expand (ast "(let* ((x 1) (y x)) y)")) (ast "((lambda (x) ((lambda (y) y) x)) 1)")))
     )
+  (testing "define expressions"
+    (is (= (expand (ast "(define (foo x) x)")) (ast "(define foo (lambda (x) x))")))
+    )
   )
