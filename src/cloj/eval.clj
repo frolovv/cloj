@@ -42,7 +42,7 @@
                            var-value))
         (if-ast? ast) (let [[_ if-test if-then if-else] ast]
                         (if (eval1 if-test env) (eval1 if-then env) (eval1 if-else env)))
-        (define-ast? ast) (let [[_ name value] ast]
+        (define-var-ast? ast) (let [[_ name value] ast]
                             (UPDATE-GLOBAL-ENV! name (eval1 value env))
                             nil)
         (and-ast? ast) (let [[_ expressions] ast]
@@ -88,6 +88,6 @@
                     (foldl f (f acc (car xs)) (cdr xs))))")
     (my-eval "(define (foldr f end xs)
                 (if (null? xs) end
-                    (f (car xs) (foldr f end (cdr xs)))))"))))
+                    (f (car xs) (foldr f end (cdr xs)))))")))
 
 (SETUP-GLOBAL-ENV)
