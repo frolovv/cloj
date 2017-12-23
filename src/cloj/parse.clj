@@ -17,6 +17,9 @@
             (= kind :string) (fn-success value rest)
             (= kind :boolean) (fn-success value rest)
             (= kind :symbol) (fn-success (symbol value) rest)
+            (= kind :quote) (parse1 rest
+                                    (fn [expr even-more-tokens] (fn-success (list 'quote expr) even-more-tokens))
+                                    fn-failure)
             (= kind :lparen) (parse-many rest
                                          (fn [exprs even-more-tokens]
                                            (let [[[last-type _] & tail] even-more-tokens]
@@ -24,11 +27,7 @@
                                                (fn-success exprs tail)
                                                (fn-failure))))
                                          fn-failure)
-            :else (fn-failure))
-
-      )
-    ))
-
+            :else (fn-failure)))))
 
 (defn parse-many
   [tokens fn-success fn-failure]

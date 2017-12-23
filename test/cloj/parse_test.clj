@@ -26,6 +26,12 @@
     (is (= (parse "(1 (2 (3)))") ['(1 (2 (3)))]))
     (is (thrown? Exception (parse "()")))
     )
+
+  (testing "quoted expressions"
+    (is (= (parse "'123") [(list 'quote 123)]))
+    (is (= (parse "'#f") [(list 'quote false)]))
+    (is (= (parse "'\"abc\"") [(list 'quote "abc")]))
+    )
   )
 
 (defn parse-unparse
