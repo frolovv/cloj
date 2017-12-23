@@ -30,6 +30,7 @@
   (testing "quoted expressions"
     (is (= (parse "'123") [(list 'quote 123)]))
     (is (= (parse "'#f") [(list 'quote false)]))
+    (is (= (parse "'a") [(list 'quote 'a)]))
     (is (= (parse "'\"abc\"") [(list 'quote "abc")]))
     )
   )

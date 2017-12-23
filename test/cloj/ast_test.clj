@@ -62,6 +62,7 @@
   (testing "parsing quoted expressions"
     (is (= (ast "'123") [[:const 123]]))
     (is (= (ast "'#t") [[:const true]]))
+    (is (= (ast "'a") [[:const 'a]]))
     (is (= (ast "'\"abc\"") [[:const "abc"]]))
   ))
 
