@@ -12,7 +12,6 @@
 (defn applic-ast? [ast] (= (first ast) :application))
 (defn and-ast? [ast] (= (first ast) :and))
 (defn or-ast? [ast] (= (first ast) :or))
-(defn define-ast? [ast] (= (first ast) :define))
 
 (defn define-var-ast? [ast]
   (and (= (first ast) :define)
@@ -29,10 +28,10 @@
         (if-ast? ast) (let [[_ if-test if-then if-else] ast]
                         [:if (expand1 if-test) (expand1 if-then) (expand1 if-else)])
         (define-var-ast? ast) (let [[_ name value] ast]
-                            [:define name (expand1 value)])
+                                [:define name (expand1 value)])
         (define-fun-ast? ast) (let [[_ name-and-args body] ast
                                     [name & args] name-and-args]
-                            [:define name [:lambda args (expand1 body)]])
+                                [:define name [:lambda args (expand1 body)]])
         (or-ast? ast) (let [[_ exprs] ast]
                         [:or (map expand1 exprs)])
         (and-ast? ast) (let [[_ exprs] ast]
