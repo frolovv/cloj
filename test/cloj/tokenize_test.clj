@@ -34,22 +34,17 @@
   (is (between-ch \A \Z \A))
   (is (not (between-ch \A \Z \a))))
 
-(deftest get-digits-test
-  (testing "getting chars from char list"
-    (is (= (vector (list \space \4 \5 \6) '(:number 123)) (get-digits (seq "123 456"))))
-    (is (= (vector '() '(:number 123)) (get-digits (seq "123"))))))
-
 (deftest symbol?-test
   (testing "true cases"
-    (is (my-symbol? \a))
-    (is (my-symbol? \A))
-    (is (my-symbol? \!))
-    (is (my-symbol? \^)))
+    (is (symbol-or-digit? \a))
+    (is (symbol-or-digit? \A))
+    (is (symbol-or-digit? \!))
+    (is (symbol-or-digit? \1))
+    (is (symbol-or-digit? \^)))
   (testing "false cases"
-    (is (not (my-symbol? \1)))
-    (is (not (my-symbol? \tab)))
-    (is (not (my-symbol? \.)))
-    (is (not (my-symbol? \$)))))
+    (is (not (symbol-or-digit? \tab)))
+    (is (not (symbol-or-digit? \.)))
+    (is (not (symbol-or-digit? \$)))))
 
 (deftest get-symbol-test
   (testing "sanity checks"
@@ -71,5 +66,8 @@
     (is (= (tokenize "lambda") ['(:symbol "lambda")]))
     (is (= (tokenize "\"hello world\"") ['(:string "hello world")]))
     (is (= (tokenize "(lambda)") ['(:lparen \() '(:symbol "lambda") '(:rparen \))])))
+  (testing "numbers sanity"
+    (is (= (tokenize "123") ['(:number 123)]))
+    (is (= (tokenize "-123") ['(:number -123)])))
   (testing "omitting whitespaces"
     (is (= (tokenize " 123 ") (tokenize "123")))))

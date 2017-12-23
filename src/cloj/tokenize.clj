@@ -5,7 +5,7 @@
 
 (defn between
   [start end n]
-    (and (>= n start) (<= n end)))
+  (and (>= n start) (<= n end)))
 
 (def valid-symbols (set (seq "!'*+-/<>=?^")))
 
@@ -17,29 +17,25 @@
 
 (defn whitespace?
   [ch]
-    (between 0 32 (int ch)))
+  (between 0 32 (int ch)))
 
-(defn my-symbol?
+(defn symbol-or-digit?
   [ch]
-    (or (between-ch \a \z ch)
-        (between-ch \A \Z ch)
-        (contains? valid-symbols ch)))
-
-(defn get-digits
-  [chars]
-  (let [[digits rest] (split-with digit? chars)
-        joined (clojure.string/join digits)
-        num (read-string joined)
-        ]
-    (list rest (list :number num))))
+  (or (between-ch \a \z ch)
+      (between-ch \A \Z ch)
+      (digit? ch)
+      (contains? valid-symbols ch)))
 
 (defn get-symbol
   [chars]
-  (let [[symbols rest] (split-with my-symbol? chars)
+  (let [[symbols rest] (split-with symbol-or-digit? chars)
         joined (clojure.string/join symbols)
-        ]
-    (list rest (list :symbol joined))))
-
+        value (read-string joined)
+        token (if (number? value)
+                (list :number value)
+                (list :symbol (name value)))]
+    (list rest token)))
+    
 (defn get-string
   [chars]
   (let [[chars' more-chars] (split-with #(not (= %1 \")) (rest chars))
@@ -50,10 +46,10 @@
 
 (defn get-boolean
   [chars]
-    (let [[_ value & rest] chars]
-      (cond (= value \t) (list rest '(:boolean true))
-            (= value \f) (list rest '(:boolean false))
-            :else (fail-fast value))))
+  (let [[_ value & rest] chars]
+    (cond (= value \t) (list rest '(:boolean true))
+          (= value \f) (list rest '(:boolean false))
+          :else (fail-fast value))))
 
 (defn tokenize1
   [chars tokens]
@@ -65,16 +61,11 @@
             (= ch \)) (recur rest (conj tokens (list :rparen ch)))
             (= ch \#) (let [[rest' token] (get-boolean chars)]
                         (recur rest' (conj tokens token)))
-            (digit? ch) (let [[rest' token] (get-digits chars)]
-                          (recur rest' (conj tokens token)))
-            (my-symbol? ch) (let [[rest' token] (get-symbol chars)]
-                           (recur rest' (conj tokens token)))
+            (symbol-or-digit? ch) (let [[rest' token] (get-symbol chars)]
+                              (recur rest' (conj tokens token)))
             (= ch \") (let [[rest' token] (get-string chars)]
                         (recur rest' (conj tokens token)))
-            :else (throw (Exception. (format "unknown char [%s]" ch)))
-            )
-      )))
-
+            :else (throw (Exception. (format "unknown char [%s]" ch)))))))
 
 (defn tokenize
   [str]
