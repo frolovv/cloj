@@ -93,8 +93,8 @@
     (is (= (tokenize "#\\0") ['(:char \0)])))
 
   (testing "quote sanity"
-    (is (= (tokenize "'123") '[(:quote) (:number 123)]))
-    (is (= (tokenize "'#t") '[(:quote) (:boolean true)])))
+    (is (= (tokenize "'123") '[(:quote \') (:number 123)]))
+    (is (= (tokenize "'#t") '[(:quote \') (:boolean true)])))
 
   (testing "strings sanity"
     (is (= (tokenize "\"\"") ['(:string "")]))
