@@ -24,13 +24,14 @@
   (testing "parsing expressions"
     (is (= (parse "(123 4 5 6)") [(list 123 4 5 6)]))
     (is (= (parse "(1 (2 (3)))") ['(1 (2 (3)))]))
-    (is (thrown? Exception (parse "()")))
+    (is (= (parse "()") ['()]))
     )
 
   (testing "quoted expressions"
     (is (= (parse "'123") [(list 'quote 123)]))
     (is (= (parse "'#f") [(list 'quote false)]))
     (is (= (parse "'a") [(list 'quote 'a)]))
+    (is (= (parse "'()") [(list 'quote '() )]))
     (is (= (parse "'\"abc\"") [(list 'quote "abc")]))
     )
   )

@@ -26,7 +26,13 @@
                                              (if (= last-type :rparen)
                                                (fn-success exprs tail)
                                                (fn-failure))))
-                                         fn-failure)
+                                         (fn []
+                                           (if (> (count rest) 0)
+                                             (let [[[last-type _] & tail] rest]
+                                               (if (= (last-type :rparen))
+                                                 (fn-success '() tail)
+                                                 (fn-failure)))
+                                             (fn-failure))))
             :else (fn-failure)))))
 
 (defn parse-many

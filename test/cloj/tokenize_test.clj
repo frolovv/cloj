@@ -95,6 +95,7 @@
   (testing "quote sanity"
     (is (= (tokenize "'123") '[(:quote \') (:number 123)]))
     (is (= (tokenize "'a") '[(:quote \') (:symbol "a")]))
+    (is (= (tokenize "'()") '[(:quote \') (:lparen \() (:rparen \))]))
     (is (= (tokenize "'#t") '[(:quote \') (:boolean true)])))
 
   (testing "strings sanity"
