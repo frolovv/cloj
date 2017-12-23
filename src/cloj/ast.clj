@@ -62,12 +62,21 @@
 (defn boolean?
   [expr] (or (= expr true) (= expr false)))
 
+;; (quote 1)
+(defn quoted-expr?
+  [expr]
+  (and (list? expr)
+       (= (count expr) 2)
+       (= (first expr) 'quote)))
+
 (defn ast1
   [expr]
   (cond (number? expr) [:const expr]
         (string? expr) [:const expr]
         (symbol? expr) [:var expr]
         (boolean? expr) [:const expr]
+        (quoted-expr? expr) (let [[_ body] expr]
+          [:const body])
         (if-expr? expr) (let [[_ if-test if-then if-else] expr]
                           [:if (ast1 if-test) (ast1 if-then) (ast1 if-else)])
         (define-expr? expr) (let [[_ name value] expr]
