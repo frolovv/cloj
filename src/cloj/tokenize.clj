@@ -69,6 +69,7 @@
       (cond (whitespace? ch) (recur rest tokens)
             (= ch \() (recur rest (conj tokens (list :lparen ch)))
             (= ch \)) (recur rest (conj tokens (list :rparen ch)))
+            (= ch \') (recur rest (conj tokens (list :quote)))
             (= ch \#) (let [[rest' token] (handle-hash chars)]
                         (recur rest' (conj tokens token)))
             (symbol-or-digit? ch) (let [[rest' token] (get-symbol chars)]
