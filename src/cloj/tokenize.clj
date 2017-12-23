@@ -24,6 +24,7 @@
   (or (between-ch \a \z ch)
       (between-ch \A \Z ch)
       (digit? ch)
+      (= ch \.)
       (contains? valid-symbols ch)))
 
 (defn get-symbol

@@ -41,9 +41,9 @@
     (is (symbol-or-digit? \!))
     (is (symbol-or-digit? \1))
     (is (symbol-or-digit? \^)))
+  (is (symbol-or-digit? \.))
   (testing "false cases"
     (is (not (symbol-or-digit? \tab)))
-    (is (not (symbol-or-digit? \.)))
     (is (not (symbol-or-digit? \$)))))
 
 (deftest get-symbol-test
@@ -68,6 +68,10 @@
     (is (= (tokenize "(lambda)") ['(:lparen \() '(:symbol "lambda") '(:rparen \))])))
   (testing "numbers sanity"
     (is (= (tokenize "123") ['(:number 123)]))
+    (is (= (tokenize "1.23") ['(:number 1.23)]))
+    (is (= (tokenize "-1.23") ['(:number -1.23)]))
     (is (= (tokenize "-123") ['(:number -123)])))
   (testing "omitting whitespaces"
     (is (= (tokenize " 123 ") (tokenize "123")))))
+
+(run-tests)
