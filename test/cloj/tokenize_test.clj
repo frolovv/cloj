@@ -20,71 +20,56 @@
     (let [start 0 end 10]
       (is (between start end 0))
       (is (between start end 10))
-      (is (between start end 5))
-      ))
+      (is (between start end 5))))
 
   (testing "false cases"
     (let [start 0 end 10]
       (is (not (between start end 999)))
-      (is (not (between start end 999)))
-      ))
-)
+      (is (not (between start end 999))))))
 
 (deftest between-ch-test
   (testing "sanity check")
-    (is (between-ch \a \z \a))
-    (is (between-ch \a \z \z))
-    (is (between-ch \A \Z \A))
-    (is (not (between-ch \A \Z \a)))
-)
+  (is (between-ch \a \z \a))
+  (is (between-ch \a \z \z))
+  (is (between-ch \A \Z \A))
+  (is (not (between-ch \A \Z \a))))
 
 (deftest get-digits-test
   (testing "getting chars from char list"
     (is (= (vector (list \space \4 \5 \6) '(:number 123)) (get-digits (seq "123 456"))))
-    (is (= (vector '() '(:number 123)) (get-digits (seq "123"))))
-
-    ))
+    (is (= (vector '() '(:number 123)) (get-digits (seq "123"))))))
 
 (deftest symbol?-test
   (testing "true cases"
     (is (my-symbol? \a))
     (is (my-symbol? \A))
     (is (my-symbol? \!))
-    (is (my-symbol? \^))
-    )
+    (is (my-symbol? \^)))
   (testing "false cases"
     (is (not (my-symbol? \1)))
     (is (not (my-symbol? \tab)))
     (is (not (my-symbol? \.)))
-    (is (not (my-symbol? \$)))
-    )
-  )
+    (is (not (my-symbol? \$)))))
 
 (deftest get-symbol-test
   (testing "sanity checks"
     (is (= (get-symbol (seq "abc")) ['() '(:symbol "abc")]))
-    (is (= (get-symbol (seq "abc 123")) ['(\space \1 \2 \3) '(:symbol "abc")]))
-    ))
+    (is (= (get-symbol (seq "abc 123")) ['(\space \1 \2 \3) '(:symbol "abc")]))))
 
 (deftest get-string-test
   (testing "sanity checks"
-    (is (= (get-string (seq "\"abc\"")) ['() '(:string "abc")]))
-    ))
+    (is (= (get-string (seq "\"abc\"")) ['() '(:string "abc")]))))
 
 (deftest get-boolean-test
   (testing "sanity checks"
     (is (= (get-boolean (seq "#t")) [nil '(:boolean true)]))
-    (is (= (get-boolean (seq "#f")) [nil '(:boolean false)]))
-    ))
+    (is (= (get-boolean (seq "#f")) [nil '(:boolean false)]))))
 
 (deftest tokenize-test
   (testing "sanity checks"
     (is (= (tokenize "123") ['(:number 123)]))
     (is (= (tokenize "lambda") ['(:symbol "lambda")]))
     (is (= (tokenize "\"hello world\"") ['(:string "hello world")]))
-    (is (= (tokenize "(lambda)") ['(:lparen \() '(:symbol "lambda") '(:rparen \))]))
-    )
+    (is (= (tokenize "(lambda)") ['(:lparen \() '(:symbol "lambda") '(:rparen \))])))
   (testing "omitting whitespaces"
-    (is (= (tokenize " 123 ") (tokenize "123")))
-    )
-  )
+    (is (= (tokenize " 123 ") (tokenize "123")))))
