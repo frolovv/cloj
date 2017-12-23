@@ -36,7 +36,7 @@
                 (list :number value)
                 (list :symbol (name value)))]
     (list rest token)))
-    
+
 (defn get-string
   [chars]
   (let [[chars' more-chars] (split-with #(not (= %1 \")) (rest chars))
@@ -45,12 +45,21 @@
 
 (defn fail-fast [ch] (throw (Exception. (format "unknown char [%s]" ch))))
 
-(defn get-boolean
+(defn handle-hash
   [chars]
-  (let [[_ value & rest] chars]
-    (cond (= value \t) (list rest '(:boolean true))
-          (= value \f) (list rest '(:boolean false))
-          :else (fail-fast value))))
+  (let [[__hash ch & rest] chars]
+    (cond
+      (= \t ch) (list rest '(:boolean true))
+      (= \f ch) (list rest '(:boolean false))
+      (= \\ ch) (let [[symbols rest'] (split-with symbol-or-digit? rest)
+                      value (clojure.string/join symbols)]
+                  (cond
+                    (= "newline" value) (list rest' '(:char \newline))
+                    (= "tab" value) (list rest' '(:char \tab))
+                    (= "space" value) (list rest' '(:char \space))
+                    (= (count value) 1) (list rest' (list :char (first symbols)))
+                    :else (throw (Exception. (format "can't handle char [%s]" chars)))))
+      :else (throw (Exception. (format "can't handle char [%s]" chars))))))
 
 (defn tokenize1
   [chars tokens]
@@ -60,10 +69,10 @@
       (cond (whitespace? ch) (recur rest tokens)
             (= ch \() (recur rest (conj tokens (list :lparen ch)))
             (= ch \)) (recur rest (conj tokens (list :rparen ch)))
-            (= ch \#) (let [[rest' token] (get-boolean chars)]
+            (= ch \#) (let [[rest' token] (handle-hash chars)]
                         (recur rest' (conj tokens token)))
             (symbol-or-digit? ch) (let [[rest' token] (get-symbol chars)]
-                              (recur rest' (conj tokens token)))
+                                    (recur rest' (conj tokens token)))
             (= ch \") (let [[rest' token] (get-string chars)]
                         (recur rest' (conj tokens token)))
             :else (throw (Exception. (format "unknown char [%s]" ch)))))))

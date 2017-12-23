@@ -55,10 +55,18 @@
   (testing "sanity checks"
     (is (= (get-string (seq "\"abc\"")) ['() '(:string "abc")]))))
 
-(deftest get-boolean-test
-  (testing "sanity checks"
-    (is (= (get-boolean (seq "#t")) [nil '(:boolean true)]))
-    (is (= (get-boolean (seq "#f")) [nil '(:boolean false)]))))
+(deftest handle-hash-test
+  (testing "booleans"
+    (is (= (handle-hash (seq "#t")) [nil '(:boolean true)]))
+    (is (= (handle-hash (seq "#f")) [nil '(:boolean false)])))
+  (testing "special chars"
+    (is (= (handle-hash (seq "#\\newline")) '[() (:char \newline)]))
+    (is (= (handle-hash (seq "#\\tab")) '[() (:char \tab)]))
+    (is (= (handle-hash (seq "#\\space")) '[() (:char \space)])))
+  (testing "regular chars"
+    (is (= (handle-hash (seq "#\\a")) '[() (:char \a)]))
+    (is (= (handle-hash (seq "#\\0")) '[() (:char \0)]))
+    (is (= (handle-hash (seq "#\\A")) '[() (:char \A)]))))
 
 (deftest tokenize-test
   (testing "sanity checks"
@@ -77,10 +85,17 @@
     (is (= (tokenize "#t") ['(:boolean true)]))
     (is (= (tokenize "#f") ['(:boolean false)])))
 
+  (testing "chars sanity"
+    (is (= (tokenize "#\\a") ['(:char \a)]))
+    (is (= (tokenize "#\\newline") ['(:char \newline)]))
+    (is (= (tokenize "#\\space") ['(:char \space)]))
+    (is (= (tokenize "#\\tab") ['(:char \tab)]))
+    (is (= (tokenize "#\\0") ['(:char \0)])))
+
   (testing "strings sanity"
     (is (= (tokenize "\"\"") ['(:string "")]))
     (is (= (tokenize "\"abc\"") ['(:string "abc")])))
-    
+
   (testing "omitting whitespaces"
     (is (= (tokenize " 123 ") (tokenize "123")))))
 
