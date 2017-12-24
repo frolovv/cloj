@@ -77,7 +77,7 @@
     (my-eval "(define even? (lambda (n) (if (zero? n) #t (odd? (- n 1)))))")
 
     ;; boolean 
-    (my-eval "(define not (lambda (x) (if x #f #t)))")
+    (my-eval "(define (not x) (and (boolean? x) (= x #f)))")
     (my-eval "(define (boolean? x) (or (= x #t) (= x #f)))")
 
     ;; predicates

@@ -18,7 +18,15 @@
 (testing "boolean functions"
     (is (= (my-eval "(not #t)") '(false)))
     (is (= (my-eval "(not #f)") '(true)))
+    (is (= (my-eval "(not 3)") '(false)))
+    (is (= (my-eval "(not 'x)") '(false)))
+    (is (= (my-eval "(not '())") '(false)))
+    
     (is (= (my-eval "(boolean? #t)") '(true)))
+    (is (= (my-eval "(boolean? #f)") '(true)))
+    (is (= (my-eval "(boolean? 3)") '(false)))
+    (is (= (my-eval "(boolean? 'x)") '(false)))
+    (is (= (my-eval "(boolean? '())") '(false)))
     )
 
   (testing "map function"
