@@ -31,20 +31,23 @@
 (defn make-env
   [old-env names values]
   (let [new-env (zipmap names values)]
-    (fn [sym] (or (new-env sym) (old-env sym)))))
+    (fn [sym]
+      (if (contains? new-env sym)
+        (new-env sym)
+        (old-env sym)))))
 
 (defn eval1
   [ast env]
   (cond (const-ast? ast) (const-value ast)
         (var-ast? ast) (let [var-value (env (var-name ast))]
                          (if (nil? var-value)
-                           (throw (Exception. "unbounded variable"))
+                           (throw (Exception. (str "unbounded variable " (var-name ast))))
                            var-value))
         (if-ast? ast) (let [[_ if-test if-then if-else] ast]
                         (if (eval1 if-test env) (eval1 if-then env) (eval1 if-else env)))
         (define-var-ast? ast) (let [[_ name value] ast]
-                            (UPDATE-GLOBAL-ENV! name (eval1 value env))
-                            nil)
+                                (UPDATE-GLOBAL-ENV! name (eval1 value env))
+                                nil)
         (and-ast? ast) (let [[_ expressions] ast]
                          (reduce (fn [result expr] (and result (eval1 expr env))) true expressions))
         (or-ast? ast) (let [[_ expressions] ast]
@@ -75,6 +78,7 @@
 
     ;; boolean 
     (my-eval "(define not (lambda (x) (if x #f #t)))")
+    (my-eval "(define (boolean? x) (or (= x #t) (= x #f)))")
 
     ;; predicates
     (my-eval "(define null? (lambda (xs) (and (list? xs) (zero? (length xs)))))")
