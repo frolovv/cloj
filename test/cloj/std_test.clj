@@ -15,6 +15,12 @@
     (is (= (my-eval "(null? (list))") '(true)))
     (is (= (my-eval "(null? 123)") '(false))))
 
+(testing "boolean functions"
+    (is (= (my-eval "(not #t)") '(false)))
+    (is (= (my-eval "(not #f)") '(true)))
+    (is (= (my-eval "(boolean? #t)") '(true)))
+    )
+
   (testing "map function"
     (is (= (my-eval "(map zero? (list))") '(())))
     (is (= (my-eval "(map zero? (list 0))") '((true))))
@@ -26,3 +32,5 @@
 
   (testing "foldr function"
     (is (= (my-eval "(foldr + 0 (list 1 2 3))") '(6)))))
+
+(run-tests)
